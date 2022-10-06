@@ -1,40 +1,76 @@
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-# Initialize parameters
-T = 0.5; S0 = 80; mu = 0.05; sigma = 0.2; r = 0.05; N = 20000; K = 100
-dt = T/N
+def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps, StrikePrice): 
 
-#The up and down factors
-u = np.exp(r*dt + sigma*np.sqrt(dt))
-d = 1/u
+    # Initialize parameters
+    # Calculate the length of each time increment
+    dt = TimeToExpiry/TotalSteps
 
-# probability of up and down moves
-pu = 0.5*(1+((mu - r - 0.5*(sigma**2))/sigma)*np.sqrt(dt))
-pd = 1 - pu
+    #Change of price going up/down
+    u = np.exp(RiskfreeRate*dt + sigma*np.sqrt(dt))
+    d = np.exp(RiskfreeRate*dt - sigma*np.sqrt(dt))
 
-#Risk neutral probability measure q  
-q = (np.exp(r*dt)-np.exp(-sigma*np.sqrt(dt)))/(np.exp(sigma*np.sqrt(dt))-np.exp(-sigma*np.sqrt(dt)))
+    # risk neutral probability of an up move
+    pu = 0.5*(1+((mu - RiskfreeRate - 0.5*(sigma**2))/sigma)*np.sqrt(dt))
+    # risk neutral probabiluty of a down move
+    pd = 1 - pu
 
-#Building the binomial price tree
-priceTree =  np.full((N, N), np.nan)
-priceTree[0,0] = S0
+    # Building the binomial price tree
+    # Create an array full of nan to store the stock prices
+    priceTree =  np.full((TotalSteps, TotalSteps), np.nan)
+    priceTree[0,0] = InitialPrice
 
-for i in range(1, N):
-    priceTree[0:i, i] = priceTree[0:i, (i-1)]* u
-    priceTree[i, i] = priceTree[i-1, i-1] * d
+    for ii in range(1, TotalSteps):
+        # For each time increment, calculate the evolved up price vector at t
+        priceTree[0:ii, ii] = priceTree[0:ii, (ii-1)]* u
+        # However, there is the case at the bottom of the tree at any t that is only obtained by going down one step
+        priceTree[ii, ii] = priceTree[(ii-1), (ii-1)] * d
 
-# Build the option value tree
-optionTree = np.full_like(priceTree, np.nan)
-optionTree[:,-1] = np.maximum(K- priceTree[:,-1], 0)
+    # Build the option value tree
+    optionTree = np.full_like(priceTree, np.nan)
+    exercise_boundary = np.full((TotalSteps,2), np.nan)
 
-discountfactor = np.exp(-r*dt)
+    # Start with the terminal value
+    # Implement the put option formula for the last vector representing the option value at the end of Total Period
+    optionTree[:,-1] = np.maximum(0, StrikePrice - priceTree[:,-1])
 
-backSteps = optionTree.shape[1] - 1
+    # Discount rate for each time increment, by the rate that numirare asset changes
+    discountfactor = np.exp(-RiskfreeRate*dt)
 
-for i in range(backSteps, 0, -1):
-    optionTree[0:i,i-1] = discountfactor * (q*optionTree[0:i, i]+(1-q)*optionTree[1:i+1, i])
-    optionTree[0:i, i] = np.maximum(K - priceTree[0:i, i], optionTree[0:i, i])
+    backSteps = optionTree.shape[1] - 1
 
-print(optionTree[0,0])
+    for ii in range(backSteps, 0, -1):
+        optionTree[0:ii,ii-1] = \
+            discountfactor * \
+            (pu * optionTree[0:ii, ii] \
+            + pd * optionTree[1:ii + 1, ii])
+        
+        optionTree[0:ii, ii] = np.maximum(StrikePrice - priceTree[0:ii, ii], optionTree[0:ii, ii])
+        
+        # Try to record the first time it becomes optimal to exercise the option rather than holding it
+        exercise_decision = 0
+        # We keep increasing the decision 'spot' in each ii vector until we find it better to exercise, i.e. 
+        # The option value because smaller than the exercise return
+        while optionTree[exercise_decision,ii] > (StrikePrice - priceTree[exercise_decision, ii]):
+            exercise_decision += 1
+        
+        # We record this position of first exercise decision for each step ii
+        exercise_boundary[ii,0] = exercise_decision
+        exercise_boundary[ii,1] = priceTree[exercise_decision,ii]
 
-stoppingRegion = np.full_like(priceTree, np.nan)
+    print(exercise_boundary)
+    plt.plot(exercise_boundary[:,1])
+    plt.title('Exercise Boundary')
+    plt.xlabel('Time Increments')
+    plt.ylabel('Stock Price at t')
+    plt.savefig('Exercise_Boundary_Time.png')
+
+    return(optionTree[0,0])
+
+    stoppingRegion = np.full_like(priceTree, np.nan)
+
+if __name__ == "__main__":
+        crr = CRRPricer_A(1, 10, 0.05, 0.2, 0.02, 5000, 10)
+        print(crr)
