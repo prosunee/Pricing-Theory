@@ -12,10 +12,12 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     u = np.exp(RiskfreeRate*dt + sigma*np.sqrt(dt))
     d = np.exp(RiskfreeRate*dt - sigma*np.sqrt(dt))
 
-    # risk neutral probability of an up move
+    # probability of an up move
     pu = 0.5*(1+((mu - RiskfreeRate - 0.5*(sigma**2))/sigma)*np.sqrt(dt))
-    # risk neutral probabiluty of a down move
+    # probabiluty of a down move
     pd = 1 - pu
+    # Risk neutral probability measure q
+    q = 0.5*(1-0.5*sigma*np.sqrt(dt))
 
     # Building the binomial price tree
     # Create an array full of nan to store the stock prices
@@ -44,8 +46,8 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     for ii in range(backSteps, 0, -1):
         optionTree[0:ii,ii-1] = \
             discountfactor * \
-            (pu * optionTree[0:ii, ii] \
-            + pd * optionTree[1:ii + 1, ii])
+            (q * optionTree[0:ii, ii] \
+            + (1-q) * optionTree[1:ii + 1, ii])
         
         optionTree[0:ii, ii] = np.maximum(StrikePrice - priceTree[0:ii, ii], optionTree[0:ii, ii])
         
