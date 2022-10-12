@@ -52,13 +52,13 @@ for i in range(0, N):
 
 #plotting the exercise boundary
 
-plt.plot(B_i, label = 'Exercise Boundary')
-plt.axhline(y = K, color = 'r', label = 'Strike Price')
-plt.legend()
-plt.title('Exercise boundary for an American Put option with Strike 10')
-plt.xlabel('Time Steps')
-plt.ylabel('Option Price, P(t)')
-plt.show()
+# plt.plot(B_i, label = 'Exercise Boundary')
+# plt.axhline(y = K, color = 'r', label = 'Strike Price')
+# plt.legend()
+# plt.title('Exercise boundary for an American Put option with Strike 10')
+# plt.xlabel('Time Steps')
+# plt.ylabel('Option Price, P(t)')
+# plt.show()
 
 #finding the hedge positions for the S Asset
 hedge_position = np.full_like(priceTree, np.nan)
@@ -78,4 +78,4 @@ plt.xlabel('Stock Price')
 plt.ylabel(r'$\alpha$')
 plt.title('Position in asset S for different time periods, t ')
 plt.legend()
-plt.show()
+plt.savefig('Heding_Strategy.png')
