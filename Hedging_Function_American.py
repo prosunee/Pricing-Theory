@@ -70,7 +70,8 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.xlabel('Stock Price')
     plt.ylabel(r'$\alpha$')
     plt.xlim(5, 20)
-    plt.ylim( -1.25,0.25)
+    plt.ylim(-1.25,0.25)
+    plt.scatter(priceTree[0,0], hedge_position[0,0])
     plt.title('Position in asset S for different time periods, t ')
     plt.legend()
     plt.savefig('Hedging_Strategy_Risky_Am.png')
@@ -95,11 +96,12 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     for i in hedgetimes2:
         plt.plot(priceTree[:, int(i)], hedge_position_B[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.plot(priceTree[0,0], hedge_position_B[0,0], marker="o", markersize=8, markerfacecolor="blue")
+    plt.plot(priceTree[0,0], hedge_position_B[0,0], marker="o", markersize=5, markerfacecolor="blue")
     plt.xlabel('S Price')
     plt.ylabel(r'$\beta$')
     plt.xlim(5, 20)
     plt.ylim(-1,11)
+    plt.scatter(priceTree[0,0], hedge_position_B[0,0])
     plt.title('Position in asset B for different time periods, t ')
     plt.legend()
     plt.savefig('Hedging_Strategy_Rf_Am.png')
