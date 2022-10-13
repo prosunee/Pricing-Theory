@@ -40,12 +40,16 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
 
     backSteps = optionTree.shape[1] - 1
 
+    discountfactor = np.exp(-RiskfreeRate*dt)
+
+
     for ii in range(backSteps, 0, -1):
         optionTree[0:ii,ii-1] = \
+            discountfactor*\
             (q * optionTree[0:ii, ii] \
             + (1-q) * optionTree[1:ii + 1, ii])
         
-        optionTree[0:ii, ii] = np.maximum(StrikePrice - priceTree[0:ii, ii], optionTree[0:ii, ii])
+        optionTree[0:ii, ii-1] = np.maximum(StrikePrice - priceTree[0:ii, ii-1], optionTree[0:ii, ii-1])
         
         # Try to record the first time it becomes optimal to exercise the option rather than holding it
         exercise_decision = 0

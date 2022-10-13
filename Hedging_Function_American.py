@@ -45,11 +45,11 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
 
     for ii in range(backSteps, 0, -1):
         optionTree[0:ii,ii-1] = \
-            discountfactor * \
+            discountfactor*\
             (q * optionTree[0:ii, ii] \
             + (1-q) * optionTree[1:ii + 1, ii])
         
-        optionTree[0:ii, ii] = np.maximum(StrikePrice - priceTree[0:ii, ii], optionTree[0:ii, ii])
+        optionTree[0:ii, ii-1] = np.maximum(StrikePrice - priceTree[0:ii, ii-1], optionTree[0:ii, ii-1])
 
     #finding the hedge positions for the S Asset
     hedge_position = np.full_like(priceTree, np.nan)

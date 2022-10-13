@@ -47,7 +47,7 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
             (pu * optionTree[0:ii, ii] \
             + pd * optionTree[1:ii + 1, ii])
         
-        optionTree[0:ii, ii] = np.maximum(StrikePrice - priceTree[0:ii, ii], optionTree[0:ii, ii])
+        optionTree[0:ii, ii-1] = np.maximum(StrikePrice - priceTree[0:ii, ii-1], optionTree[0:ii, ii-1])
         
         # Try to record the first time it becomes optimal to exercise the option rather than holding it
         exercise_decision = 0
