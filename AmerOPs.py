@@ -38,14 +38,10 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     # Implement the put option formula for the last vector representing the option value at the end of Total Period
     optionTree[:,-1] = np.maximum(0, StrikePrice - priceTree[:,-1])
 
-    # Discount rate for each time increment, by the rate that numirare asset changes
-    discountfactor = np.exp(-RiskfreeRate*dt)
-
     backSteps = optionTree.shape[1] - 1
 
     for ii in range(backSteps, 0, -1):
         optionTree[0:ii,ii-1] = \
-            discountfactor * \
             (q * optionTree[0:ii, ii] \
             + (1-q) * optionTree[1:ii + 1, ii])
         
