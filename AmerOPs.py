@@ -66,13 +66,15 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     plt.plot(exercise_boundary[:,1])
     plt.title('Exercise Boundary')
     plt.xlabel('Time Increments')
-    plt.ylabel('Stock Price at t')
+    plt.ylabel('Stock Price at t') 
+    plt.ylim(5,10)
     plt.savefig('Exercise_Boundary_Time.png')
+   
 
     return(optionTree[0,0])
 
     stoppingRegion = np.full_like(priceTree, np.nan)
 
 if __name__ == "__main__":
-        crr = CRRPricer_A(1, 10, 0.05, 0.2, 0.02, 5000, 10)
+        crr = CRRPricer_A(1, 10, 0.05, 0.3, 0.02, 5000, 10)
         print(crr)
