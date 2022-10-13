@@ -66,7 +66,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
         #print(priceTree[:,int(i)])
         plt.plot(priceTree[:,int(i)], hedge_position[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.plot(priceTree[0,0], hedge_position[0,0], marker="o", markersize=8, markerfacecolor="blue")
+    plt.scatter(priceTree[0,0], hedge_position[0,0])
     plt.xlabel('Stock Price')
     plt.ylabel(r'$\alpha$')
     plt.xlim(5, 20)
@@ -96,7 +96,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     for i in hedgetimes2:
         plt.plot(priceTree[:, int(i)], hedge_position_B[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.plot(priceTree[0,0], hedge_position_B[0,0], marker="o", markersize=5, markerfacecolor="blue")
+    plt.scatter(priceTree[0,0], hedge_position_B[0,0])
     plt.xlabel('S Price')
     plt.ylabel(r'$\beta$')
     plt.xlim(5, 20)
