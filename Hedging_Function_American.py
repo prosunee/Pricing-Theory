@@ -66,7 +66,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
         #print(priceTree[:,int(i)])
         plt.plot(priceTree[:,int(i)], hedge_position[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.plot(priceTree[0,0], hedge_position[0,0], marker="o", markersize=10, markeredgecolor="red", markerfacecolor="blue")
+    plt.plot(priceTree[0,0], hedge_position[0,0], marker="o", markersize=5, markerfacecolor="blue")
     plt.xlabel('Stock Price')
     plt.ylabel(r'$\alpha$')
     plt.xlim(5, 20)
@@ -85,17 +85,17 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     B_price =  np.full_like(priceTree, np.nan)
     hedge_position_B = np.full_like(priceTree, np.nan)
     B_price[0, 0] = 1
+    hedge_position_B[0, 0] = (optionTree[0,0]- hedge_position[0,0]*priceTree[0,0])/B_price[0,0]
 
     for i in range(1, TotalSteps):
         B_price[0:i, i] = np.exp(RiskfreeRate*i*dt)
         hedge_position_B[0:i, i] = (optionTree[0:i, i]- hedge_position[0:i,i]*priceTree[0:i,i])/B_price[0:i,i]
-        #print("\n", hedge_position_B)
+
         
     for i in hedgetimes2:
-        #print(priceTree[:,int(i)])
         plt.plot(priceTree[:, int(i)], hedge_position_B[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.plot(priceTree[0,0], hedge_position_B[0,0], marker="o", markersize=10, markeredgecolor="red", markerfacecolor="blue")
+    plt.plot(priceTree[0,0], hedge_position_B[0,0], marker="o", markersize=5, markerfacecolor="blue")
     plt.xlabel('S Price')
     plt.ylabel(r'$\beta$')
     plt.xlim(5, 20)
@@ -105,5 +105,5 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.savefig('Hedging_Strategy_Rf_Am.png')
 
 if __name__ == "__main__":
-        Hedge_Position(1, 10, 0.05, 0.2, 0.02, 50, 10)
+        Hedge_Position(1, 10, 0.05, 0.2, 0.02, 5000, 10)
         
