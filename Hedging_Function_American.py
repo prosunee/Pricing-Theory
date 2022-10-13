@@ -105,5 +105,5 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.savefig('Hedging_Strategy_Rf_Am.png')
 
 if __name__ == "__main__":
-        Hedge_Position(1, 10, 0.05, 0.2, 0.02, 5000, 10)
+        Hedge_Position(1, 10, 0.05, 0.2, 0.08, 5000, 10)
         
