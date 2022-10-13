@@ -51,7 +51,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
 
     #finding the hedge positions for the S Asset
     hedge_position = np.full_like(priceTree, np.nan)
-    hedge_position[0, 0] = (optionTree[0, 0]-optionTree[1, 0])/(priceTree[0,0]*(np.exp(sigma*np.sqrt(dt))-np.exp(-sigma*np.sqrt(dt)))*np.exp(RiskfreeRate*dt))
+    hedge_position[0, 0] = (optionTree[1, 0]-optionTree[1, 1])/(priceTree[0,0]*(np.exp(sigma*np.sqrt(dt))-np.exp(-sigma*np.sqrt(dt)))*np.exp(RiskfreeRate*dt))
 
     for i in range(1, TotalSteps):
         hedge_position[0:i, i-1] = (optionTree[0:i, i]-optionTree[1:i+1, i])/(priceTree[0:i,i-1]*(np.exp(sigma*np.sqrt(dt))-np.exp(-sigma*np.sqrt(dt)))*np.exp(RiskfreeRate*dt))
@@ -68,7 +68,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.ylabel(r'$\alpha$')
     plt.xlim(5, 20)
     plt.ylim( -1.25,0.25)
-    plt.scatter(priceTree[0,0], hedge_position[0,0],color = "blue")
+    plt.scatter(priceTree[0,0], hedge_position[0,0])
     plt.title('Position in asset S for different time periods, t, with European Option ')
     plt.legend()
     plt.savefig('Hedging_Strategy_Risky_Euro.png')
@@ -95,11 +95,11 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
         #print(priceTree[:,int(i)])
         plt.plot(priceTree[:, int(i)], hedge_position_B[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
-    plt.scatter(priceTree[0,0], hedge_position_B[0,0],color="blue")
     plt.xlabel('S Price')
     plt.ylabel(r'$\beta$')
     plt.xlim(5, 20)
     plt.ylim(-1,11)
+    plt.scatter(priceTree[0,0], hedge_position_B[0,0])
     plt.title('Position in asset B for different time periods, t, with European Option ')
     plt.legend()
     plt.savefig('Hedging_Strategy_Rf_Euro.png')
