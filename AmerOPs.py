@@ -76,5 +76,5 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     stoppingRegion = np.full_like(priceTree, np.nan)
 
 if __name__ == "__main__":
-        crr = CRRPricer_A(1, 10, 0.05, 0.3, 0.02, 5000, 10)
+        crr = CRRPricer_A(1, 10, 0.05, 0.2, 0.02, 5000, 10)
         print(crr)
