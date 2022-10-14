@@ -1,3 +1,4 @@
+import string
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -68,9 +69,8 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     plt.xlabel('Time Increments')
     plt.ylabel('Stock Price at t') 
     plt.ylim(5,10)
-    plt.savefig('Exercise_Boundary_Time.png')
-   
+    plt.savefig('Exercise_Boundary_Time_v'+ str(sigma) + '_r' + str(RiskfreeRate) +'.png',bbox_inches='tight')
+    plt.close()
 
     return(optionTree[0,0], exercise_boundary)
-
 
