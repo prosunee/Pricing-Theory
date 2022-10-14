@@ -23,27 +23,5 @@ if __name__ == "__main__":
     X = KDE_profit(crr, exercise_boundary, S, K, r, dt)
 
 
-    """
-        plt.figure("Figure 1")
-        plt.plot(exercise_boundary[:,1], label = f'$\sigma = {sigma*100}$%')
-
-    plt.title('Exercise Boundary at different volatility levels')
-    plt.xlabel('Time Increments')
-    plt.ylabel('Stock Price at t')
-    plt.legend()
-    plt.show()
-    plt.savefig("Exercise Boundary at different volatility levels")
-
-
-
-        plt.figure("Figure 2")
-        plt.plot(exercise_boundary[:,1], label = f'rate = {rate}')
-        
-    plt.title('Exercise Boundary at different interest rate levels')
-    plt.xlabel('Time Increments')
-    plt.ylabel('Stock Price at t')
-    plt.legend()
-    plt.show()
-"""
 
 

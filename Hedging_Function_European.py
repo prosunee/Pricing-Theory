@@ -83,7 +83,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.scatter(priceTree[0,0], hedge_position[0,0])
     plt.title('Position in asset S for different time periods, t, with European Option ')
     plt.legend()
-    plt.savefig('Hedging_Strategy_Risky_Euro.png')
+    plt.savefig('Hedging_Strategy_Risky_Euro_v'+ str(sigma) + '_r' + str(RiskfreeRate) +'.png')
     plt.close()
 
     #finding the hedge positions for the B Asset
@@ -115,8 +115,13 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.scatter(priceTree[0,0], hedge_position_B[0,0])
     plt.title('Position in asset B for different time periods, t, with European Option ')
     plt.legend()
-    plt.savefig('Hedging_Strategy_Rf_Euro.png')
+    plt.savefig('Hedging_Strategy_Rf_Euro_v'+ str(sigma) + '_r' + str(RiskfreeRate) +'.png')
 
 if __name__ == "__main__":
-        Hedge_Position(1, 10, 0.05, 0.2, 0.08, 5000, 10)
-        
+    sigmas = [0.1, 0.15, 0.2, 0.25, 0.3]
+    risk_free_rates = [0.005, 0.02, 0.035, 0.05]
+
+    for sigma in sigmas:
+        Hedge_Position(1, 10, 0.05, sigma, 0.02, 5000, 10)
+    for rate in risk_free_rates:
+        Hedge_Position(1, 10, 0.05, 0.2, rate, 5000, 10)
