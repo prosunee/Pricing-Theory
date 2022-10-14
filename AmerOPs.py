@@ -71,10 +71,6 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
     plt.savefig('Exercise_Boundary_Time.png')
    
 
-    return(optionTree[0,0])
+    return(optionTree[0,0], exercise_boundary)
 
-    stoppingRegion = np.full_like(priceTree, np.nan)
 
-if __name__ == "__main__":
-        crr = CRRPricer_A(1, 10, 0.05, 0.5, 0.02, 5000, 10)
-        print(crr)
