@@ -66,6 +66,18 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
         #print(priceTree[:,int(i)])
         plt.plot(priceTree[:,int(i)], hedge_position[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
+    hedge_position_AE = ([],[])
+    hedge_position_BE = ([],[])
+    expiry = int(1*TotalSteps)
+    for i in range(expiry):
+        if StrikePrice - priceTree[i,-1]>0:
+            hedge_position_AE[-1].append(-1)
+            hedge_position_BE[-1].append((optionTree[i,-1] - (-1)*priceTree[i,-1])/np.exp(RiskfreeRate*1))
+        else:
+            hedge_position_AE[-1].append(0)
+            hedge_position_BE[-1].append(optionTree[i,-1])
+
+    plt.plot(priceTree[:,-1], hedge_position_AE[-1], label = f't=1')
     plt.xlabel('Stock Price')
     plt.ylabel(r'$\alpha$')
     plt.xlim(5, 20)
@@ -95,6 +107,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     for i in hedgetimes2:
         plt.plot(priceTree[:, int(i)], hedge_position_B[:,int(i)], label = f't ={hedgetimes[hedgetimes2.index(i)]}')
 
+    plt.plot(priceTree[:,-1], hedge_position_BE[-1], label = f't=1')
     plt.xlabel('S Price')
     plt.ylabel(r'$\beta$')
     plt.xlim(5, 20)
