@@ -101,7 +101,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
 
     for i in range(1, TotalSteps):
         B_price[0:i, i] = np.exp(RiskfreeRate*i*dt)
-        hedge_position_B[0:i, i] = (optionTree[0:i, i]- hedge_position[0:i,i]*priceTree[0:i,i])/B_price[0:i,i]
+        hedge_position_B[0:i, i-1] = (optionTree[0:i, i]- hedge_position[0:i,i-1]*priceTree[0:i,i])/B_price[0:i,i]
 
         
     for i in hedgetimes2:
@@ -116,6 +116,7 @@ def Hedge_Position  (TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalS
     plt.title('Position in asset B for different time periods, t ')
     plt.legend()
     plt.savefig('Hedging_Strategy_Rf_Am_v'+ str(sigma) + '_r' + str(RiskfreeRate) +'.png')
+    plt.close()
 
 if __name__ == "__main__":
     sigmas = [0.1, 0.15, 0.2, 0.25, 0.3]
