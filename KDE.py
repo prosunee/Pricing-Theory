@@ -23,14 +23,13 @@ def KDE_profit(option_price, exercise_boundary, prices, strike_price, r, dt):
         AmerPut_Val.extend([-option_price]*(len(prices)-len(AmerPut_Val)))
     else:
         pass
-
-    AmerPut_Val = pd.DataFrame(AmerPut_Val)
-
-    ax = AmerPut_Val.plot(kind='hist')
-    AmerPut_Val.plot(kind='kde', secondary_y= True)
-    plt.show()
     
-    return AmerPut_Val
+    data = {'AmerPut_Val': AmerPut_Val}
+    PL = pd.DataFrame(data)
+    PL['row_num'] = PL.reset_index().index
+    PL = PL[["row_num","AmerPut_Val"]]
+
+    return PL
 
 def KDE_time():
 
