@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 
 def KDE_profit(option_price, exercise_boundary, prices, strike_price, r, dt):
     
+    S = prices[:,1:]
+
     exercise_prices = []; AmerPut_Val = []
 
-    for i in range(len(prices)):
-        for j in range(len(exercise_boundary)):
-            if (prices[i,j] <= exercise_boundary[j,1]):
-                exercise_prices.append([j, prices[i,j]])
+    for i in range(len(S)):
+        for j in range(len(S[0,:])):
+            if (S[i,j] <= exercise_boundary[j,1]):
+                exercise_prices.append([j+1, S[i,j]])
                 break
             else:
                 pass
@@ -31,6 +33,23 @@ def KDE_profit(option_price, exercise_boundary, prices, strike_price, r, dt):
 
     return PL
 
-def KDE_time():
+def KDE_time(exercise_boundary, prices, TimeSteps):
+    S = prices[:,1:]
+    exercise_times = []
+
+    for i in range(len(S)):
+        for j in range(len(S[0,:])):
+            if (prices[i,j] <= exercise_boundary[j,1]):
+                exercise_times.append(j+1)
+                break
+            else:
+                pass
+        
+    data = {'Exercise Times': exercise_times}
+    ex_times = pd.DataFrame(data)
+    ex_times['row_num'] = ex_times.reset_index().index
+    ex_times = ex_times[["row_num", "Exercise Times"]]
+
+    return ex_times
 
     return 0
