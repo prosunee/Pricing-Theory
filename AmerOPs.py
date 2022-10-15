@@ -63,7 +63,7 @@ def CRRPricer_A(TimeToExpiry, InitialPrice, mu, sigma, RiskfreeRate, TotalSteps,
         exercise_boundary[ii,0] = exercise_decision
         exercise_boundary[ii,1] = priceTree[exercise_decision,ii]
 
-    print(exercise_boundary)
+    #print(exercise_boundary)
     plt.plot(exercise_boundary[:,1])
     plt.title('Exercise Boundary')
     plt.xlabel('Time Increments')

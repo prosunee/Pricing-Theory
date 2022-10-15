@@ -45,11 +45,11 @@ def KDE_time(exercise_boundary, prices, TimeSteps):
             else:
                 pass
         
+    exercise_times = np.array([x/TimeSteps for x in exercise_times])
+
     data = {'Exercise Times': exercise_times}
     ex_times = pd.DataFrame(data)
     ex_times['row_num'] = ex_times.reset_index().index
     ex_times = ex_times[["row_num", "Exercise Times"]]
 
     return ex_times
-
-    return 0
