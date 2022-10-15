@@ -13,11 +13,10 @@ if __name__ == "__main__":
     #stimulated price paths
     S = pricePaths(T, S0, K, mu, sigma, r, N, paths)
     #profit and loses
-    PL = KDE_profit(crr, exercise_boundary, S, K, r, dt)
-
+    PL20 = KDE_profit(crr, exercise_boundary, S, K, r, dt)
     #profit and loses plot for 20% volatility
-    ax = PL.plot(kind='hist')
-    PL.plot(kind='kde', secondary_y= True)
+    PL = PL20.drop(columns=["row_num"])
+    ax = PL.plot(kind='kde')
     plt.show()
 
     #Stimulate price paths for various realized volatility 
@@ -32,11 +31,14 @@ if __name__ == "__main__":
     PL25 = KDE_profit(crr, exercise_boundary, S25, K, r, dt)
     PL30 = KDE_profit(crr, exercise_boundary, S30, K, r, dt)
 
-    df = PL10.merge(PL15,how ='left').merge(PL,how ='left').merge(PL25,how ='left').merge(PL30,how ='left')
-
-    ax = df.plot(kind='hist')
-    df.plot(kind='kde', secondary_y= True)
+    df = PL10.merge(PL15,how ='left', on = 'row_num').merge(PL20,how ='left', on = 'row_num').merge(PL25,how ='left', on = 'row_num').merge(PL30,how ='left', on = 'row_num')
+    df.columns = ["row_num","PL10","PL15","PL20","PL25", "PL30"]
+    df.drop(["row_num"], axis = 1, inplace = True)
+    print(df)
+    ax = df.plot(kind='kde')
     plt.show()
+
+
 
 '''
 #Exercise Boundaries with varying volatilities and varying risk free interest rates   
@@ -48,6 +50,7 @@ if __name__ == "__main__":
         CRRPricer_A(1, 10, 0.05, sigma, 0.02, 5000, 10)
     for rate in risk_free_rates:
         CRRPricer_A(1, 10, 0.05, 0.2, rate, 5000, 10)
+
 '''
 
 
