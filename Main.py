@@ -16,7 +16,9 @@ if __name__ == "__main__":
     PL20 = KDE_profit(crr, exercise_boundary, S, K, r, dt)
     #profit and loses plot for 20% volatility
     PL = PL20.drop(columns=["row_num"])
+    PL.columns = [r'$\sigma$ =0.2']
     ax = PL.plot(kind='kde')
+    plt.xlabel("Profit and Loss")
     plt.show()
 
     #Stimulate price paths for various realized volatility 
@@ -32,10 +34,11 @@ if __name__ == "__main__":
     PL30 = KDE_profit(crr, exercise_boundary, S30, K, r, dt)
 
     df = PL10.merge(PL15,how ='left', on = 'row_num').merge(PL20,how ='left', on = 'row_num').merge(PL25,how ='left', on = 'row_num').merge(PL30,how ='left', on = 'row_num')
-    df.columns = ["row_num","PL10","PL15","PL20","PL25", "PL30"]
+    df.columns = ["row_num",r'$\sigma$ =0.1',r'$\sigma$ =0.15',r'$\sigma$ =0.2',r'$\sigma$ =0.25', r'$\sigma$ =0.3']
     df.drop(["row_num"], axis = 1, inplace = True)
     print(df)
     ax = df.plot(kind='kde')
+    plt.xlabel("Profit and Loss")
     plt.show()
 
 
