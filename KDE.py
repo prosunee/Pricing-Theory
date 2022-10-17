@@ -21,6 +21,13 @@ def KDE_profit(option_price, exercise_boundary, prices, strike_price, r, dt):
         x = np.exp(-r*dt*exercise_prices[i][0])*(strike_price-exercise_prices[i][1]) - option_price
         AmerPut_Val.append(x)
 
+    AmerPut_Val2 = AmerPut_Val
+
+    data2 = {'AmerPut_Val': AmerPut_Val2}
+    PL2 = pd.DataFrame(data2)
+    PL2['row_num'] = PL2.reset_index().index
+    PL2 = PL2[["row_num","AmerPut_Val"]]
+    
     if len(AmerPut_Val) < len(prices):
         AmerPut_Val.extend([-option_price]*(len(prices)-len(AmerPut_Val)))
     else:
@@ -31,7 +38,8 @@ def KDE_profit(option_price, exercise_boundary, prices, strike_price, r, dt):
     PL['row_num'] = PL.reset_index().index
     PL = PL[["row_num","AmerPut_Val"]]
 
-    return PL
+
+    return PL, PL2 
 
 def KDE_time(exercise_boundary, prices, TimeSteps):
     S = prices[:,1:]
