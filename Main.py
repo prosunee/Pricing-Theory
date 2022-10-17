@@ -26,36 +26,40 @@ if __name__ == "__main__":
      """
 
     #Parameter mu 0.02, 0.08
+    crrmu1, exercise_boundarymu1 = CRRPricer_A(T, S0, 0.01, sigma, r, N, K)
     crrmu2, exercise_boundarymu2 = CRRPricer_A(T, S0, 0.02, sigma, r, N, K)
-    crrmu8, exercise_boundarymu8 = CRRPricer_A(T, S0, 0.08, sigma, r, N, K)
+    Smu1 = pricePaths(T, S0, K, 0.01, sigma, r, N, paths)
     Smu2 = pricePaths(T, S0, K, 0.02, sigma, r, N, paths)
-    Smu8 = pricePaths(T, S0, K, 0.08, sigma, r, N, paths)
-    """
+    
+    PLmu1, PLmu1_2 = KDE_profit(crrmu1, exercise_boundarymu1, Smu1, K, r, dt)
     PLmu2, PLmu2_2 = KDE_profit(crrmu2, exercise_boundarymu2, Smu2, K, r, dt)
-    PLmu8, PLmu8_2 = KDE_profit(crrmu8, exercise_boundarymu8, Smu8, K, r, dt)
-    df = PLmu2.merge(PL20,how ='left', on = 'row_num').merge(PLmu8,how ='left', on = 'row_num')
-    df2 = PLmu2_2.merge(PL20_2, how = 'left, on = 'row_num').merge(PLmu8_2, how = 'left', on = 'row_num')
-    df.columns = ["row_num",r'$\mu$ =0.02',r'$\mu$ =0.05',r'$\mu$ =0.08']
-    df2.columns = ["row_num",r'$\mu$ =0.02',r'$\mu$ =0.05',r'$\mu$ =0.08']
+
+    
+    df = PLmu1.merge(PLmu2,how ='left', on = 'row_num').merge(PL20,how ='left', on = 'row_num')
+    df.columns = ["row_num",r'$\mu$ =0.01',r'$\mu$ =0.02',r'$\mu$ =0.05']
     df.drop(["row_num"], axis = 1, inplace = True)
-    df2.drop(["row_num"], axis = 1, inplace = True)
     ax = df.plot(kind='kde')
     plt.xlabel("Profit and Loss")
     plt.show()
+    
 
+    df2 = PLmu1_2.merge(PLmu2_2, how = 'left', on = 'row_num').merge(PL20_2, how = 'left', on = 'row_num')
+    df2.columns = ["row_num",r'$\mu$ =0.01',r'$\mu$ =0.02',r'$\mu$ =0.05']
+    df2.drop(["row_num"], axis = 1, inplace = True)
     ax2 = df2.plot(kind = 'kde')
     plt.xlabel = ("Profit and Loss")
     plt.show()
 
-    """
+    '''
+    Tmu1 = KDE_time(exercise_boundarymu1, Smu1, N)
     Tmu2 = KDE_time(exercise_boundarymu2, Smu2, N)
-    Tmu8 = KDE_time(exercise_boundarymu8, Smu8, N)
-    df = Tmu2.merge(T20,how ='left', on = 'row_num').merge(Tmu8,how ='left', on = 'row_num')
-    df.columns = ["row_num",r'$\mu$ =0.02',r'$\mu$ =0.05',r'$\mu$ =0.08']
+    df = Tmu1.merge(Tmu2,how ='left', on = 'row_num').merge(T20,how ='left', on = 'row_num')
+    df.columns = ["row_num",r'$\mu$ =0.01',r'$\mu$ =0.02',r'$\mu$ =0.05']
     df.drop(["row_num"], axis = 1, inplace = True)
     ax = df.plot(kind='kde')
     plt.xlabel("Time")
     plt.show()
+    '''
 
     #Parameter sigma 0.1,0.3
     crrv1, exercise_boundaryv1 = CRRPricer_A(T, S0, mu, 0.1, r, N, K)
@@ -63,25 +67,28 @@ if __name__ == "__main__":
     Sv1 = pricePaths(T, S0, K, mu, 0.1, r, N, paths)
     Sv3 = pricePaths(T, S0, K, mu, 0.3, r, N, paths)
 
-    '''
+    
     PLv1, PLv1_2 = KDE_profit(crrv1, exercise_boundaryv1, Sv1, K, r, dt)
     PLv3, PLv3_2 = KDE_profit(crrv3, exercise_boundaryv3, Sv3, K, r, dt)
+
+    '''
     df = PLv1.merge(PL20,how ='left', on = 'row_num').merge(PLv3,how ='left', on = 'row_num')
-    df2 = PLv1_2.merge(PL20_2,how ='left', on = 'row_num').merge(PLv3_2,how ='left', on = 'row_num')
     df.columns = ["row_num",r'$\sigma$ =0.1',r'$\sigma$ =0.2',r'$\sigma$ =0.3']
-    df2.columns = ["row_num",r'$\sigma$ =0.1',r'$\sigma$ =0.2',r'$\sigma$ =0.3']
     df.drop(["row_num"], axis = 1, inplace = True)
-    df2.drop(["row_num"], axis = 1, inplace = True)
     ax = df.plot(kind='kde')
     plt.xlabel("Profit and Loss")
     plt.show()
+    '''
 
+    df2 = PLv1_2.merge(PL20_2,how ='left', on = 'row_num').merge(PLv3_2,how ='left', on = 'row_num')
+    df2.columns = ["row_num",r'$\sigma$ =0.1',r'$\sigma$ =0.2',r'$\sigma$ =0.3']
+    df2.drop(["row_num"], axis = 1, inplace = True)
     ax2 = df2.plot(kind='kde')
     plt.xlabel("Profit and Loss")
     plt.show()
 
+    
     '''
-
     Tv1 = KDE_time(exercise_boundaryv1, Sv1, N)
     Tv3 = KDE_time(exercise_boundaryv3, Sv3, N)
     df = Tv1.merge(T20,how ='left', on = 'row_num').merge(Tv3,how ='left', on = 'row_num')
@@ -90,6 +97,7 @@ if __name__ == "__main__":
     ax = df.plot(kind='kde')
     plt.xlabel("Time")
     plt.show()
+    '''
 
     #Parameter r 0.05,0.08
     crrr5, exercise_boundaryr5 = CRRPricer_A(T, S0, mu, sigma, 0.05, N, K)
@@ -99,20 +107,23 @@ if __name__ == "__main__":
     
     PLr5, PLr5_2 = KDE_profit(crrr5, exercise_boundaryr5, Sr5, K, r, dt)
     PLr8, PLr8_2 = KDE_profit(crrr8, exercise_boundaryr8, Sr8, K, r, dt)
+
+    '''
     df = PL20.merge(PLr5,how ='left', on = 'row_num').merge(PLr8,how ='left', on = 'row_num')
-    df2 = PL20.merge(PLr5_2,how ='left', on = 'row_num').merge(PLr8_2,how ='left', on = 'row_num')
     df.columns = ["row_num",r'r =0.02',r'r =0.05',r'r =0.08']
-    df2.columns = ["row_num",r'r =0.02',r'r =0.05',r'r =0.08']
     df.drop(["row_num"], axis = 1, inplace = True)
-    df2.drop(["row_num"], axis = 1, inplace = True)
     ax = df.plot(kind='kde')
     plt.xlabel("Profit and Loss")
     plt.show()
-    
+    '''
+    df2 = PL20.merge(PLr5_2,how ='left', on = 'row_num').merge(PLr8_2,how ='left', on = 'row_num')
+    df2.columns = ["row_num",r'r =0.02',r'r =0.05',r'r =0.08']
+    df2.drop(["row_num"], axis = 1, inplace = True)
     ax2 = df2.plot(kind = 'kde')
     plt.xlabel("Profit and Loss")
     plt.show()
     
+    '''
     Tr5 = KDE_time(exercise_boundaryr5, Sr5, N)
     Tr8 = KDE_time(exercise_boundaryr8, Sr8, N)
     df = T20.merge(Tr5,how ='left', on = 'row_num').merge(Tr8,how ='left', on = 'row_num')
@@ -121,8 +132,9 @@ if __name__ == "__main__":
     ax = df.plot(kind='kde')
     plt.xlabel("Time")
     plt.show()
+    '''
 
-
+'''
 #stimulated profit and loses at various volatility with 20% volatility excercise boundary
     crr, exercise_boundary = CRRPricer_A(T, S0, mu, sigma, r, N, K)
     #stimulated price paths
@@ -156,7 +168,7 @@ if __name__ == "__main__":
     plt.xlabel("Profit and Loss")
     plt.show()
 
-
+'''
 
 
 
