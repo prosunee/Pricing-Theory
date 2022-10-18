@@ -17,6 +17,40 @@ if __name__ == "__main__":
     PL20, PL20_2 = KDE_profit(crr, exercise_boundary, S, K, r, dt)
     T20 = KDE_time(exercise_boundary, S, N)
 
+
+    #Parameter K 9, 11
+    crrk9, exercise_boundaryk9 = CRRPricer_A(T, S0, mu, sigma, r, N, 9)
+    crrk11, exercise_boundaryk11 = CRRPricer_A(T, S0, mu, sigma, r, N,11)
+    Sk9 = pricePaths(T, S0, 9, mu, sigma, r, N, paths)
+    Sk11 = pricePaths(T, S0, 11, mu, sigma, r, N, paths)
+
+    PLk9, PLk9_2 = KDE_profit(crrk9, exercise_boundaryk9, Sk9, 9, r, dt)
+    PLk11, PLk11_2 = KDE_profit(crrk11, exercise_boundaryk11, Sk11, 11, r, dt)
+
+    df = PLk9.merge(PL20,how ='left', on = 'row_num').merge(PLk11,how ='left', on = 'row_num')
+    df.columns = ["row_num",r'K = 9',r'K = 10',r'K = 11']
+    df.drop(["row_num"], axis = 1, inplace = True)
+    ax = df.plot(kind='kde')
+    plt.xlabel("Profit and Loss")
+    plt.show()
+
+    df2 = PLk9_2.merge(PL20_2,how ='left', on = 'row_num').merge(PLk11_2,how ='left', on = 'row_num')
+    df2.columns = ["row_num",r'K = 9',r'K = 10',r'K = 11']
+    df2.drop(["row_num"], axis = 1, inplace = True)
+    ax2 = df2.plot(kind='kde')
+    plt.xlabel("Profit and Loss")
+    plt.show()
+
+    
+    Tk9 = KDE_time(exercise_boundaryk9, Sk9, N)
+    Tk11 = KDE_time(exercise_boundaryk11, Sk11, N)
+    df = Tk9.merge(T20,how ='left', on = 'row_num').merge(Tk11,how ='left', on = 'row_num')
+    df.columns = ["row_num",r'K = 9',r'K = 10',r'K = 11']
+    df.drop(["row_num"], axis = 1, inplace = True)
+    ax = df.plot(kind='kde')
+    plt.xlabel("Time")
+    plt.show()
+'''
     #Parameter T 0.5, 2
     crrt05, exercise_boundaryt05 = CRRPricer_A(0.5, S0, mu, sigma, r, N, K)
     crrt2, exercise_boundaryt2 = CRRPricer_A(2, S0, mu, sigma, r, N, K)
@@ -26,7 +60,7 @@ if __name__ == "__main__":
     PLt05, PLt05_2 = KDE_profit(crrt05, exercise_boundaryt05, St05, K, r, 0.5/N)
     PLt2, PLt2_2 = KDE_profit(crrt2, exercise_boundaryt2, St2, K, r, 2/N)
 
-    '''
+   
     df = PLt05.merge(PL20,how ='left', on = 'row_num').merge(PLt2,how ='left', on = 'row_num')
     df.columns = ["row_num",r'T = 0.5',r'T = 1',r'T = 2']
     df.drop(["row_num"], axis = 1, inplace = True)
@@ -41,7 +75,7 @@ if __name__ == "__main__":
     ax2 = df2.plot(kind = 'kde')
     plt.xlabel = ("Profit and Loss")
     plt.show()
-    '''
+
 
     Tt05 = KDE_time(exercise_boundaryt05, St05, N)
     Tt2 = KDE_time(exercise_boundaryt2, St2, N)
@@ -54,7 +88,6 @@ if __name__ == "__main__":
 
   
     
-    '''
     #Parameter S0 9,11
     crrs05, exercise_boundarys05 = CRRPricer_A(T, 9, mu, sigma, r, N, K)
     crrs15, exercise_boundarys15 = CRRPricer_A(T, 11, mu, sigma, r, N, K)
